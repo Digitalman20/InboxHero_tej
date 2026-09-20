@@ -1,2 +1,4 @@
 .env
 Samples/
+.venv/
+__pychache__/
