@@ -1,0 +1,10 @@
+{
+  "facts": {
+    "meeting_before_11": {
+      "value": false,
+      "source": "m041",
+      "updated_at": "2026-09-20T00:29:43.291464"
+    }
+  },
+  "history": []
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "message_id": "test-m001",
+    "source_ids": [
+      "m001"
+    ],
+    "draft": "Hi, this is a test draft."
+  }
+]

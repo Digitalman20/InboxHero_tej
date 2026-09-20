@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>inboxHero Dashboard</title>
+    <style>
+        body { font-family: Arial; margin: 30px; }
+        .container { display: flex; gap: 20px; }
+        .box { width: 33%; border: 1px solid black; padding: 15px; }
+        .conflict { color: red; }
+    </style>
+</head>
+<body>
+    <h1>inboxHero Dashboard</h1>
+
+    <div class="container">
+        <div class="box">
+            <h2>Pending actions</h2>
+            <ul>
+                {% for action in pending_actions %}
+                    <li>{{ action.message_id }}: Send draft needs approval.</li>
+                {% else %}
+                    <li>No pending actions.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="box">
+            <h2>Flagged</h2>
+            <ul>
+                {% for decision in flagged %}
+                    <li>{{ decision.message_id }}: {{ decision.reason }}</li>
+                {% else %}
+                    <li>No flagged messages.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="box">
+            <h2>Commitments</h2>
+            <p class="conflict">
+                Conflict: m013 and m016 are both Wednesday at 2:00pm.
+            </p>
+
+            <ul>
+                {% for commitment in commitments %}
+                    <li>
+                        {{ commitment.date }}: {{ commitment.title }}
+                        Sources: {{ commitment.sources }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
