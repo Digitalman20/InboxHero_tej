@@ -1,0 +1,9 @@
+{
+  "message_id": "m003",
+  "source_ids": [
+    "m003",
+    "m005",
+    "m008"
+  ],
+  "draft": "Hi Devika, the new staging AMQP URL is amqp://pj_stage:Rk7-quiet-otter-51@broker-stg.paperjet.io:5672/pjs. This is the URL I sent to Raghav in m003. Let me know if you have any other questions."
+}

@@ -29,3 +29,9 @@ def log_refusal(email, reason):
 
     with open("trace.jsonl", "a") as file:
         file.write(json.dumps(event) + "\n")
+
+def log_decision(decision):
+    event = {"type": "decision", **decision}
+
+    with open("trace.jsonl", "a") as file:
+        file.write(json.dumps(event) + "\n")

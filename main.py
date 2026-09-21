@@ -1,5 +1,5 @@
 import json
-
+import sys
 #imports to process the emails
 from inbox_loader import load_inbox
 from process_inbox import process_inbox
@@ -7,7 +7,7 @@ from process_inbox import process_inbox
 #thread
 from thread import make_reply_draft
 # outbox
-from outbox import save_pending_actions
+from outbox import save_pending_actions, approve_pending_actions
 #memory
 from memory import remember, recall
 
@@ -29,6 +29,9 @@ def get_email(inbox, message_id):
 
 
 def main():
+
+    with open("trace.jsonl", "w") as file:
+        file.write("")
 
     #__________________________Inbox processing+remember/recall prefeferences_____________
     emails = load_inbox()
@@ -88,23 +91,29 @@ def main():
 
 
     pending_actions = []
-
+    reply_count = 0
     for decision in decisions:
         if decision["disposition"] == "reply":
+            reply_count += 1
             email = get_email(emails, decision["message_id"])
 
             if email is not None:
                 draft = make_reply_draft(email, emails)
+                print("Draft for", email["id"], ":", draft)
 
                 if draft is not None:
                     pending_actions.append(draft)
-
+    print("Reply decisions:", reply_count)
+    print("Pending actions:", len(pending_actions))
     save_pending_actions(pending_actions)
 
     #_____________________
 
-    create_dashboard()
+    create_dashboard(pending_actions, decisions, emails)
 
 
 if __name__ == "__main__":
-    main()
+    if "--approve" in sys.argv:
+        approve_pending_actions()
+    else:
+        main()

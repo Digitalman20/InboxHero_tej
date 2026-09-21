@@ -1,4 +1,12 @@
 .env
-Samples/
 .venv/
+venv/
 __pycache__/
+*.pyc
+.DS_Store
+
+decisions.json
+pending_actions.json
+memory.json
+output/
+Samples

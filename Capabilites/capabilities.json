@@ -1,0 +1,99 @@
+{
+    "student": "Tej Kandimalla, cert-aai-2026-06-0038",
+    "repo": "https://github.com/Digitalman20/InboxHero_tej/tree/main",
+    "system": {
+      "framework": "Flask for dashboard rendering; custom Python inbox workflow",
+      "model": "Local Ollama model configured in config.py",
+      "messages_processed": 100,
+      "rule_handled": 0,
+      "dispositions": ["archive", "reply", "defer", "escalate", "flag"],
+      "retrieval": "thread-walk",
+      "irreversible": ["send"],
+      "reversible": ["draft", "archive", "label"],
+      "gate": "both",
+      "preference_demo": "m041 stores the no-meetings-before-11:00am preference, which changes m043 to escalate."
+    },
+    "capabilities": [
+      {
+        "id": "R1",
+        "name": "Zeroing the inbox",
+        "tier": "B",
+        "claim": "Processes all 100 messages and gives each one disposition and a reason.",
+        "command": "python main.py",
+        "observable": "decisions.json contains 100 decisions with message_id, disposition, reason, and handled_by.",
+        "evidence": "decisions.json"
+      },
+      {
+        "id": "R2",
+        "name": "Grounded reply drafting",
+        "tier": "B",
+        "claim": "Walks the message thread before drafting a reply and records source message IDs.",
+        "command": "python main.py",
+        "observable": "pending_actions.json contains drafts with source_ids; insufficient context produces no draft.",
+        "evidence": "pending_actions.json"
+      },
+      {
+        "id": "R3",
+        "name": "Approval",
+        "tier": "C",
+        "claim": "Creates drafts as pending actions and requires human approval before writing to outbox.",
+        "command": "python main.py",
+        "observable": "pending_actions.json is created while outbox remains unchanged during the dry run.",
+        "evidence": "pending_actions.json, outbox/, trace.jsonl"
+      },
+      {
+        "id": "R4",
+        "name": "Memory",
+        "tier": "C",
+        "claim": "Stores owner preferences in memory.json and applies them after restart.",
+        "command": "python main.py",
+        "observable": "memory.json stores the m041 preference and m043 is marked escalate in decisions.json.",
+        "evidence": "memory.json, decisions.json"
+      },
+      {
+        "id": "R5",
+        "name": "Hostile inbox protection",
+        "tier": "C",
+        "claim": "Flags prompt injection and phishing attempts, takes no requested action, and logs the refusal.",
+        "command": "python main.py",
+        "observable": "m017, m024, m039, and m047 are flagged and appear in the run summary.",
+        "evidence": "decisions.json, trace.jsonl"
+      },
+      {
+        "id": "R6",
+        "name": "Dashboard",
+        "tier": "B",
+        "claim": "Creates a dashboard with pending actions, flagged mail, and sourced commitments with conflicts.",
+        "command": "python main.py",
+        "observable": "output/dashboard.html contains exactly the Pending actions, Flagged, and Commitments panes.",
+        "evidence": "output/dashboard.html"
+      },
+      {
+        "id": "X1",
+        "name": "Batch receipt handling",
+        "tier": "A",
+        "claim": "Finds receipt emails and archives them as one batch.",
+        "command": "python demo.py --cap X1",
+        "observable": "Creates output/receipt_batch.json with receipt message IDs.",
+        "evidence": "output/receipt_batch.json"
+      },
+      {
+        "id": "X2",
+        "name": "Thread summarizer",
+        "tier": "B",
+        "claim": "Summarizes a selected thread and identifies its important information and next step.",
+        "command": "python demo.py --cap X2 --thread t-launch",
+        "observable": "Creates output/thread_summary.txt.",
+        "evidence": "output/thread_summary.txt"
+      },
+      {
+        "id": "X3",
+        "name": "Daily digest",
+        "tier": "B",
+        "claim": "Creates a daily digest of pending actions, flagged messages, and dates or deadlines.",
+        "command": "python demo.py --cap X3",
+        "observable": "Creates output/daily_digest.txt.",
+        "evidence": "output/daily_digest.txt"
+      }
+    ]
+  }
